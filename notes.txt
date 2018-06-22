@@ -1,0 +1,45 @@
+# installs
+pillow-simd with accelerated libjpeg to reduce CPU bottlenecks with image transforms
+torchvision (transforms, dataloaders)
+
+-----------------------------------------------------------------
+
+
+Speedup steps:
+torchvision loaders + fp16 + bs*2 + pillow-simd + data prefetching
+
+
+
+LOOK AT THIS!
+imagenet-fast repo
+
+
+# Nvidia notes on half precision
+
+
+Profile CUDA to make sure it is utilizing half precision
+git clone https://github.com/fastai/imagenet-fast.git
+cd imagenet-fast
+pip install -y nvprof
+/usr/local/cuda/bin/nvprof --log-file nvprof_output.txt python profile_fp16.py
+cat nvprof_output.txt | grep fp16_s884
+# Should see some 884 calls
+
+vgg16 FP 32 avg over 100 runs: 183.07456254959106 ms
+vgg16 FP 16 avg over 100 runs: 118.41696977615356 ms
+
+
+--------------
+Open tabs
+https://github.com/fastai/imagenet-fast/tree/master/fp16
+https://docs.nvidia.com/deeplearning/sdk/mixed-precision-training/index.html#pytorch
+https://devblogs.nvidia.com/mixed-precision-programming-cuda-8/
+
+
+
+
+
+
+
+
+
